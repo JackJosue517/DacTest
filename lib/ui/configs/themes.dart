@@ -25,11 +25,11 @@ class AppTheme {
 
   /// Manage AppBarThemeData
   static AppBarTheme _buildAppBarTheme() {
-    return AppBarTheme(
+    return const AppBarTheme(
       elevation: 0,
       centerTitle: true,
       backgroundColor: AppColors.whiteColor,
-      color: AppColors.primaryColor,
+      foregroundColor: AppColors.darkColor,
     );
   }
   

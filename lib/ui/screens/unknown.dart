@@ -1,3 +1,4 @@
+import 'package:dactest/ui/components/back_button.dart';
 import 'package:flutter/material.dart';
 
 class UnknownScreen extends StatelessWidget {
@@ -7,6 +8,7 @@ class UnknownScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: const GoBackButton(),
         title: const Text('Erreur de navigation'),
       ),
       body: const Center(

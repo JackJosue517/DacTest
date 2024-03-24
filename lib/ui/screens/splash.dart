@@ -10,7 +10,7 @@ class SplashScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedSplashScreen(
-      splash: const LineIcon.school(size: 150, color: AppColors.primaryColor,),
+      splash: const LineIcon.airbnb(size: 150, color: AppColors.primaryColor,),
       nextScreen: const HomeScreen(),
       splashTransition: SplashTransition.fadeTransition,
     );

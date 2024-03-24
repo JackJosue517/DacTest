@@ -34,7 +34,7 @@ class AppColors {
 
   static const Color redColor = Color.fromARGB(255, 255, 34, 34);
 
-  static const Color greenColor = Color.fromARGB(255, 37, 248, 83);
+  static const Color greenColor = Color.fromARGB(255, 33, 141, 42);
 
   static const Color primaryColor = Color.fromARGB(255, 126, 24, 194);
 }
