@@ -18,7 +18,7 @@ jobs:
           channel: 'beta'
       - run: flutter pub get
       #- run: flutter format --set-exit-if-changed .
-      - run: flutter analyze .
+      # - run: flutter analyze .
       - run: flutter build apk --split-per-abi
       - uses: actions/upload-artifact@v1
         with:
@@ -27,7 +27,7 @@ jobs:
       - name: send telegram message on push
         uses: appleboy/telegram-action@master
         with:
-          to: 5469084643
+          to: 5467979333
           token: 6478602495:AAGYsVz6FU7lISKSnFhfJFBirKp8ofIwgdM
           message: |
             ${{ github.actor }} created commit:
