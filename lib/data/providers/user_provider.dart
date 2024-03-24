@@ -9,7 +9,7 @@ class UserDataProvider {
   /// Fetch cloud random data from RANDOMUSERS API
   Future<String> getUsersData() async {
     try {
-      String url = 'https://randomuser.me/api/?results=10';
+      String url = 'https://randomuser.me/api/?results=100';
       var response = await http.get(Uri.parse(url));
       return response.body;
     } catch (e) {
@@ -51,9 +51,8 @@ class UserDataProvider {
   /// Build function to retrieve the stored users data
   Future<List<UserModel>> readUsers() async {
     final db = await UserDataProvider._open();
-    final List<Map<String, dynamic>> usersMap = await db.query('users');
-    print(usersMap[0]);
-    return [
+    final List<Map<String, dynamic>> usersMap = await db.query('users') ?? [];
+    return usersMap.isEmpty ? [] : [
       for (final {
         'id': id,
         'uid': uid,

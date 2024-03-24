@@ -36,10 +36,10 @@ class _UserCardState extends State<UserCard> {
     final String whatIsIt = await Navigator.of(context).pushNamed('/home/user-details', arguments: user) as String;
     if (whatIsIt.isNotEmpty) {
       switch (whatIsIt){
-        case 'deleted':
-          Navigator.of(context).pop('deleted');
-        case 'updated':
-          ScaffoldMessenger.of(context).showSnackBar(AppSnackBar.updateSnackBar);
+        /*case 'deleted':
+          Navigator.of(context).pop('deleted');*/
+        /*case 'updated':
+          ScaffoldMessenger.of(context).showSnackBar(AppSnackBar.updateSnackBar);*/
         default:
         //TODO: What to do... I think nothing!
       }

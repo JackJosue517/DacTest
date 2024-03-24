@@ -1,4 +1,5 @@
 import 'package:dactest/core/blocs/users/users_bloc.dart';
+import 'package:dactest/data/repositories/user_repository.dart';
 import 'package:dactest/ui/components/app_snackbar.dart';
 import 'package:dactest/ui/components/custom_search.dart';
 import 'package:dactest/ui/components/user_card.dart';
@@ -98,11 +99,17 @@ class _HomeScreenState extends State<HomeScreen> {
   
   /// Build search core logic
   void _buildSearch(BuildContext context) async {
-    final result = await showSearch(context: context, delegate: CustomSearchDelegate());
+    if(!mounted) return;
+    final result = await showSearch(
+        context: context,
+        delegate: CustomSearchDelegate(
+            await context.read<UserRepository>().getUsersFromLocal()
+        )
+    );
     if(result != null){
       if (!mounted) return;
       // ignore: use_build_context_synchronously
-      Navigator.of(context).pushNamed('/home/searchview');
+      Navigator.of(context).pushNamed('/home/user-details', arguments: result);
     }
   }
 
@@ -121,12 +128,12 @@ class _HomeScreenState extends State<HomeScreen> {
     final String whatIsIt = await Navigator.of(context).pushNamed('/home/add-user') as String;
     if (whatIsIt.isNotEmpty) {
       switch (whatIsIt){
-        case 'deleted':
-          ScaffoldMessenger.of(context).showSnackBar(AppSnackBar.deleteSnackBar);
         case 'inserted':
           ScaffoldMessenger.of(context).showSnackBar(AppSnackBar.insertSnackBar);
         default:
-          //TODO: What to do... I think nothing!
+            await Future.delayed(const Duration(seconds: 3), (){
+              ScaffoldMessenger.of(context).showSnackBar(AppSnackBar.deleteSnackBar);
+            });
       }
     }
   }

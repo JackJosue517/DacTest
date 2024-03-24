@@ -1,15 +1,12 @@
+import 'package:dactest/data/models/user.dart';
 import 'package:dactest/ui/components/back_button.dart';
 import 'package:flutter/material.dart';
 
-class CustomSearchDelegate extends SearchDelegate<String> {
+class CustomSearchDelegate extends SearchDelegate<UserModel> {
   //TODO: Dummy list
-  final List<String> searchList = [
-    "Apple",
-    "Banana",
-    "Cherry",
-    "Date",
-    "Fig"
-  ];
+  final List<UserModel> searchList;
+
+  CustomSearchDelegate(this.searchList);
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -23,7 +20,7 @@ class CustomSearchDelegate extends SearchDelegate<String> {
       IconButton(
         onPressed: () => {
           if (query.isEmpty) {
-            close(context, '')
+            close(context, Null as UserModel)
           } else {
             query = ''
           }
@@ -40,13 +37,13 @@ class CustomSearchDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildResults(BuildContext context) {
-    final List<String> searchResults = searchList.where((item) => item.toLowerCase().contains(query.toLowerCase())).toList();
+    final List<UserModel> searchResults = searchList.where((item) => item.username.toLowerCase().contains(query.toLowerCase())).toList();
 
     return ListView.builder(
         itemCount: searchResults.length,
         itemBuilder: (context, index) {
           return ListTile(
-            title: Text(searchResults[index]),
+            title: Text(searchResults[index].username),
             onTap: (){
               //TODO: Handle the selected search result
               close(context, searchResults[index]);
@@ -58,18 +55,19 @@ class CustomSearchDelegate extends SearchDelegate<String> {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final List<String> suggestionsList = query.isEmpty
+    final List<UserModel> suggestionsList = query.isEmpty
         ? []
-        : searchList.where((item) => item.toLowerCase().contains(query.toLowerCase())).toList();
+        : searchList.where((item) => item.username.toLowerCase().contains(query.toLowerCase())).toList();
 
     return ListView.builder(
         itemCount: suggestionsList.length,
         itemBuilder: (context, index) {
         return ListTile(
-          title: Text(suggestionsList[index]),
+          title: Text(suggestionsList[index].username),
           onTap: (){
-           query = suggestionsList[index];
+           query = suggestionsList[index].username;
            //TODO: Show the search results based on the selected suggestion
+           close(context, suggestionsList[index]);
           },
         );
       }

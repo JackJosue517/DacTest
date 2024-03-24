@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:dactest/data/models/user.dart';
 import 'package:dactest/data/repositories/user_repository.dart';
@@ -23,7 +25,10 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
     try{
       final List<UserModel> usersList = await userRepository.getUsersFromCloud();
       //* Major request allowed here to store cloud values
-      _storeDataLocally(usersList);
+      Future.microtask(() => {
+        _storeDataLocally(usersList)
+      });
+
       emit(UsersSuccess(users: usersList));
     } catch (ex) {
       emit(UsersFailure('from fetch cloud: $ex'));
@@ -45,6 +50,7 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
   void _deleteLocalUser(event, Emitter<UsersState> emit) async{
     emit(UsersLoading());
 
+    await Future.delayed(const Duration(seconds: 2));
     try{
       final int flag = await userRepository.delete(event.user);
       emit(
@@ -62,6 +68,7 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
   void _updateLocalUser(event, Emitter<UsersState> emit) async{
     emit(UsersLoading());
 
+    await Future.delayed(const Duration(seconds: 2));
     try{
       final int flag = await userRepository.update(event.user);
       emit(
@@ -76,7 +83,7 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
     }
   }
 
-  void _storeDataLocally(List<UserModel> usersList) {
+  FutureOr<dynamic> _storeDataLocally(List<UserModel> usersList) {
     print(usersList);
     for (var user in usersList) {
       userRepository.store(user);
@@ -87,6 +94,7 @@ class UsersBloc extends Bloc<UsersEvent, UsersState> {
   void _insertLocalUser(event, Emitter<UsersState> emit) async {
     emit(UsersLoading());
 
+    await Future.delayed(const Duration(seconds: 2));
     try{
       final int flag = await userRepository.insert(event.user);
       emit(

@@ -14,17 +14,17 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = AppBlocObserver();
 
-  assert((){
+  /*assert((){
     _deleteDb();
     return true;
-  }());
+  }());*/
   runApp(const MyApp());
 }
 
-void _deleteDb() async {
+/*void _deleteDb() async {
   final dbPath = join(await getDatabasesPath(), 'users_database.db');
   await deleteDatabase(dbPath);
-}
+}*/
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

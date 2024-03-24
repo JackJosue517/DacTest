@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_lorem/flutter_lorem.dart';
 import 'package:intl/intl.dart';
 import 'package:line_icons/line_icons.dart';
+import 'package:dactest/ui/components/app_snackbar.dart';
 
 class UserDetailsScreen extends StatefulWidget {
   const UserDetailsScreen({super.key});
@@ -87,8 +88,15 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
 
   /// Build function to update user data locally
   void _editUserData(UserModel user) async {
-    final flag = await Navigator.of(context).pushNamed('/home/add-user', arguments: user);
-    print('flag: $flag');
-    Navigator.of(context).pop(flag);
+    final flag = await Navigator.of(context).pushNamed('/home/add-user', arguments: user) as String;
+    if(flag.isNotEmpty) {
+      switch (flag) {
+        case 'updated':
+          //Navigator.of(context).pop(flag);
+          ScaffoldMessenger.of(context).showSnackBar(AppSnackBar.updateSnackBar);
+        default:
+          Navigator.of(context).pop(flag);
+      }
+    }
   }
 }

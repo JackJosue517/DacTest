@@ -20,27 +20,25 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> {
   final _emailTextController = TextEditingController();
   final _phoneTextController = TextEditingController();
   final _passwordTextController = TextEditingController();
-  late UserModel _user;
-
-  get user => _user;
 
   @override
   Widget build(BuildContext context) {
     // Get necessary data and flags
-    final object = ModalRoute.of(context)?.settings.arguments;
+    final arguments = ModalRoute.of(context)?.settings.arguments;
     bool isAddForm;
+    late UserModel tmpUser;
 
-    // Build form user in consequence
-    if (object == null) {
-     _user = UserModel.empty.copyWith(
-       pic: 'https://wallpaperaccess.com/full/16225.jpg',
-     );
+    if (arguments == null) {
+      tmpUser = UserModel.empty.copyWith(
+        pic: 'https://wallpaperaccess.com/full/16225.jpg',
+      );
       isAddForm = true;
     } else {
-      _user = object as UserModel;
+      tmpUser = arguments as UserModel;
       isAddForm = false;
     }
-    _buildFormData(user);
+
+    _buildFormData(tmpUser);
 
     return Scaffold(
       appBar: AppBar(
@@ -55,7 +53,7 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> {
               color: AppColors.redColor,
               size: 30,
             ),
-            onPressed: () => _deleteUserData(user),
+            onPressed: () => _deleteUserData(tmpUser),
           ) : const Text(''),
         ],
       ),
@@ -117,7 +115,7 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 15.0),
                 child: OutlinedButton(
-                    onPressed: () => _buildLogic(isAddForm, user),
+                    onPressed: () => _buildLogic(isAddForm, tmpUser),
                     style: ButtonStyle(
                       foregroundColor: const MaterialStatePropertyAll<Color>(Colors.white),
                       backgroundColor: const MaterialStatePropertyAll<Color>(AppColors.primaryColor),
@@ -151,20 +149,20 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> {
   /// Build user data update or create
   void _buildLogic(bool formValue, UserModel user) {
     if(_formKey.currentState!.validate()) {
-      user.copyWith(
+      final UserModel updatedUser = user.copyWith(
         username: _usernameTextController.text,
         email: _emailTextController.text,
         password: _passwordTextController.text,
         phone: _phoneTextController.text,
       );
-      print("user: $user");
+      print("user: $updatedUser");
       if(formValue) {
         // User wants to add new user
         print('insert');
-        context.read<UsersBloc>().add(UsersInserted(user));
+        context.read<UsersBloc>().add(UsersInserted(updatedUser));
       } else {
         print('update');
-        context.read<UsersBloc>().add(UsersUpdated(user));
+        context.read<UsersBloc>().add(UsersUpdated(updatedUser));
       }
     }
   }
@@ -205,7 +203,7 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> {
               style: AppTexts.headline5.copyWith(color: AppColors.darkColor),
             )
         ),
-        TextButton(onPressed: _confirmAction, child: Text(
+        TextButton(onPressed: () => _confirmAction(user), child: Text(
             "J'ai compris",
             style: AppTexts.headline5.copyWith(color: AppColors.redColor),
         ))
@@ -219,7 +217,7 @@ class _AddNewUserScreenState extends State<AddNewUserScreen> {
   }
 
   /// User is okay
-  void _confirmAction() {
+  void _confirmAction(UserModel user) {
     Navigator.of(context).pop();
     context.read<UsersBloc>().add(UsersDeleted(user));
   }
