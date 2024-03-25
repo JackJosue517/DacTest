@@ -20,7 +20,6 @@ class _UserCardState extends State<UserCard> {
       child: ListTile(
         onTap: () => _loadUserDetails(widget.user),
         leading: CircleAvatar(
-          radius: 55,
           backgroundImage: NetworkImage(
               widget.user.pic
           ),
